@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id         Int      @id @default(autoincrement())
+  fullName   String
+  jobTitle   String
+  department String
+  country    String
+  salary     Float
+  email      String   @unique
+  status     String   @default("active")
+  hiredAt    DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([country])
+  @@index([jobTitle])
+  @@index([country, jobTitle])
+}
