@@ -11,6 +11,9 @@ export const getEmployees = (params: {
   country?: string;
   jobTitle?: string;
   search?: string;
+  sortField?: string;
+  sortOrder?: string;
+  status?: string;
 }) => api.get<PaginatedResponse>('/employees', { params });
 
 export const createEmployee = (data: Omit<Employee, 'id' | 'hiredAt'>) =>
@@ -21,6 +24,16 @@ export const updateEmployee = (id: number, data: Partial<Employee>) =>
 
 export const deleteEmployee = (id: number) =>
   api.delete(`/employees/${id}`);
+
+export const getAllEmployeesForExport = (params: {
+  country?: string;
+  jobTitle?: string;
+  search?: string;
+  sortField?: string;
+  sortOrder?: string;
+}) => api.get<PaginatedResponse>('/employees', {
+  params: { ...params, page: 1, pageSize: 10000 }
+});
 
 export const getSalaryStats = (country?: string) =>
   api.get<SalaryStats>('/insights/salary-stats', { params: { country } });

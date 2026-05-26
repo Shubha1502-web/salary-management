@@ -8,6 +8,11 @@ export const getAllEmployees = async (req: Request, res: Response) => {
     const country = req.query.country as string;
     const jobTitle = req.query.jobTitle as string;
     const search = req.query.search as string;
+    const sortField = (req.query.sortField as string) || 'createdAt';
+    const sortOrder = (req.query.sortOrder as string) === 'asc' ? 'asc' : 'desc';
+
+    const validSortFields = ['fullName', 'jobTitle', 'department', 'country', 'salary', 'status', 'createdAt'];
+    const orderByField = validSortFields.includes(sortField) ? sortField : 'createdAt';
 
     const where: any = {};
     if (country) where.country = country;
@@ -24,7 +29,7 @@ export const getAllEmployees = async (req: Request, res: Response) => {
         where,
         skip: (page - 1) * pageSize,
         take: pageSize,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { [orderByField]: sortOrder },
       }),
       prisma.employee.count({ where }),
     ]);

@@ -6,7 +6,7 @@ import './EmployeeForm.css';
 interface Props {
   employee: Employee | null;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (action: 'created' | 'updated') => void;
 }
 
 const COUNTRIES = ['India', 'USA', 'UK', 'Germany', 'Canada'];
@@ -66,16 +66,16 @@ const EmployeeForm: React.FC<Props> = ({ employee, onClose, onSuccess }) => {
       setErrors(errs);
       return;
     }
-
     setSaving(true);
     try {
       const data = { ...form, salary: Number(form.salary) };
       if (employee) {
         await updateEmployee(employee.id, data);
+        onSuccess('updated');
       } else {
         await createEmployee(data as any);
+        onSuccess('created');
       }
-      onSuccess();
     } catch (err) {
       setErrors({ submit: 'Failed to save employee. Email may already exist.' });
     } finally {
