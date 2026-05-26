@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { GridSortModel } from '@mui/x-data-grid';
 import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -100,7 +101,6 @@ const EmployeeTable: React.FC<Props> = ({ onEdit, onDeleteSuccess }) => {
   const [exporting, setExporting] = useState(false);
   const [openFilter, setOpenFilter] = useState<'country' | 'jobTitle' | 'status' | null>(null);
   const [filterAnchor, setFilterAnchor] = useState<{ top: number; left: number } | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const loadData = useCallback(async (
     pg: number, ps: number, s: string,
@@ -139,10 +139,9 @@ const EmployeeTable: React.FC<Props> = ({ onEdit, onDeleteSuccess }) => {
     e.stopPropagation();
     const btn = e.currentTarget as HTMLElement;
     const rect = btn.getBoundingClientRect();
-    const containerRect = containerRef.current?.getBoundingClientRect();
     setFilterAnchor({
-      top: rect.bottom - (containerRect?.top || 0) + 4,
-      left: rect.left - (containerRect?.left || 0),
+      top: rect.bottom + 4,
+      left: rect.left,
     });
     setOpenFilter(prev => prev === field ? null : field);
   };
@@ -192,7 +191,7 @@ const EmployeeTable: React.FC<Props> = ({ onEdit, onDeleteSuccess }) => {
   };
 
   return (
-    <div className="table-wrapper" ref={containerRef}>
+    <div className="table-wrapper">
       <div className="table-toolbar">
         <div className="search-wrap">
           <SearchIcon className="search-icon" />
@@ -246,8 +245,8 @@ const EmployeeTable: React.FC<Props> = ({ onEdit, onDeleteSuccess }) => {
         onDelete={handleDelete}
       />
 
-      {openFilter === 'country' && filterAnchor && (
-        <div style={{ position: 'absolute', top: filterAnchor.top, left: filterAnchor.left, zIndex: 1000 }}>
+      {openFilter === 'country' && filterAnchor && ReactDOM.createPortal(
+        <div style={{ position: 'fixed', top: filterAnchor.top, left: filterAnchor.left, zIndex: 9999 }}>
           <FilterDropdown
             options={COUNTRY_OPTIONS}
             selected={selectedCountries}
@@ -255,11 +254,12 @@ const EmployeeTable: React.FC<Props> = ({ onEdit, onDeleteSuccess }) => {
             onClose={() => setOpenFilter(null)}
             searchPlaceholder="Search countries..."
           />
-        </div>
+        </div>,
+        document.body
       )}
 
-      {openFilter === 'jobTitle' && filterAnchor && (
-        <div style={{ position: 'absolute', top: filterAnchor.top, left: filterAnchor.left, zIndex: 1000 }}>
+      {openFilter === 'jobTitle' && filterAnchor && ReactDOM.createPortal(
+        <div style={{ position: 'fixed', top: filterAnchor.top, left: filterAnchor.left, zIndex: 9999 }}>
           <FilterDropdown
             options={JOB_TITLE_OPTIONS}
             selected={selectedJobTitles}
@@ -267,11 +267,12 @@ const EmployeeTable: React.FC<Props> = ({ onEdit, onDeleteSuccess }) => {
             onClose={() => setOpenFilter(null)}
             searchPlaceholder="Search job titles..."
           />
-        </div>
+        </div>,
+        document.body
       )}
 
-      {openFilter === 'status' && filterAnchor && (
-        <div style={{ position: 'absolute', top: filterAnchor.top, left: filterAnchor.left, zIndex: 1000 }}>
+      {openFilter === 'status' && filterAnchor && ReactDOM.createPortal(
+        <div style={{ position: 'fixed', top: filterAnchor.top, left: filterAnchor.left, zIndex: 9999 }}>
           <FilterDropdown
             options={STATUS_OPTIONS}
             labelMap={STATUS_LABELS}
@@ -280,7 +281,8 @@ const EmployeeTable: React.FC<Props> = ({ onEdit, onDeleteSuccess }) => {
             onClose={() => setOpenFilter(null)}
             searchPlaceholder="Search status..."
           />
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

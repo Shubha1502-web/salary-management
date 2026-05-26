@@ -217,7 +217,7 @@ const EmployeeDataGrid: React.FC<Props> = ({
         pageSizeOptions={[10, 20, 50]}
         sortModel={sortModel}
         onSortModelChange={onSortChange}
-        rowHeight={60}
+        rowHeight={65}
         disableRowSelectionOnClick
         disableColumnFilter
         disableColumnMenu
@@ -242,12 +242,13 @@ const EmployeeDataGrid: React.FC<Props> = ({
           '& .MuiDataGrid-columnHeader:focus-within': { outline: 'none' },
           '& .MuiDataGrid-sortIcon': { color: '#1a56db' },
           '& .MuiDataGrid-cell': {
-            borderColor: '#f3f4f6',
-            color: '#111827',
-            backgroundColor: 'transparent !important',
-            display: 'flex',
-            alignItems: 'center',
-          },
+  borderColor: '#f3f4f6',
+  color: '#111827',
+  backgroundColor: 'transparent !important',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '0 14px',
+},
           '& .MuiDataGrid-cell:focus': { outline: 'none' },
           '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
           '& .MuiDataGrid-row': { backgroundColor: 'transparent !important' },

@@ -251,15 +251,21 @@
   font-weight: 600;
   font-size: 13px;
   color: var(--color-text);
-  line-height: 1.4;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .emp-email {
   font-size: 11px;
   color: var(--color-text-hint);
-  margin-top: 2px;
+  margin-top: 1px;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 .emp-salary {
   font-weight: 700;
   font-size: 13px;
