@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getSalaryStats, getSalaryByTitle } from '../api/employees';
 import { SalaryStats, SalaryByTitle } from '../types';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import GroupsIcon from '@mui/icons-material/Groups';
 import './InsightsPage.css';
 
 const COUNTRIES = ['', 'India', 'USA', 'UK', 'Germany', 'Canada'];
@@ -40,38 +44,36 @@ const InsightsPage: React.FC = () => {
           <h1 className="page-title">Salary insights</h1>
           <p className="page-sub">Aggregated salary data across the organization</p>
         </div>
-        <select
-          className="filter-select"
-          value={country}
-          onChange={e => setCountry(e.target.value)}
-        >
-          {COUNTRIES.map(c => (
-            <option key={c} value={c}>{c || 'All countries'}</option>
-          ))}
+        <select className="filter-select" value={country} onChange={e => setCountry(e.target.value)}>
+          {COUNTRIES.map(c => <option key={c} value={c}>{c || 'All countries'}</option>)}
         </select>
       </div>
 
       {loading ? (
-        <p className="loading">Loading...</p>
+        <p className="loading">Loading insights...</p>
       ) : (
         <>
           <div className="stat-grid">
             <div className="stat-card">
+              <div className="stat-icon"><TrendingDownIcon style={{ fontSize: 20 }} /></div>
               <div className="stat-label">Minimum salary</div>
               <div className="stat-value">{fmt(stats?.min || 0)}</div>
               <div className="stat-sub">{country || 'All countries'}</div>
             </div>
             <div className="stat-card">
+              <div className="stat-icon"><TrendingUpIcon style={{ fontSize: 20 }} /></div>
               <div className="stat-label">Maximum salary</div>
               <div className="stat-value">{fmt(stats?.max || 0)}</div>
               <div className="stat-sub">{country || 'All countries'}</div>
             </div>
             <div className="stat-card">
+              <div className="stat-icon"><BarChartIcon style={{ fontSize: 20 }} /></div>
               <div className="stat-label">Average salary</div>
               <div className="stat-value">{fmt(stats?.avg || 0)}</div>
               <div className="stat-sub">{country || 'All countries'}</div>
             </div>
             <div className="stat-card">
+              <div className="stat-icon"><GroupsIcon style={{ fontSize: 20 }} /></div>
               <div className="stat-label">Total headcount</div>
               <div className="stat-value">{stats?.count?.toLocaleString()}</div>
               <div className="stat-sub">employees</div>
@@ -92,11 +94,13 @@ const InsightsPage: React.FC = () => {
               <tbody>
                 {byTitle.map(row => (
                   <tr key={row.jobTitle}>
-                    <td>{row.jobTitle}</td>
+                    <td style={{ fontWeight: 600 }}>{row.jobTitle}</td>
                     <td>{row.count.toLocaleString()}</td>
-                    <td>{fmt(row.avgSalary)}</td>
-                    <td className={row.vsOrgAvg >= 0 ? 'positive' : 'negative'}>
-                      {row.vsOrgAvg >= 0 ? '+' : ''}{row.vsOrgAvg}%
+                    <td style={{ fontWeight: 700 }}>{fmt(row.avgSalary)}</td>
+                    <td>
+                      <span className={row.vsOrgAvg >= 0 ? 'positive' : 'negative'}>
+                        {row.vsOrgAvg >= 0 ? '+' : ''}{row.vsOrgAvg}%
+                      </span>
                     </td>
                   </tr>
                 ))}

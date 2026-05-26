@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import AddIcon from '@mui/icons-material/Add';
 import EmployeeTable from '../components/Employees/EmployeeTable';
 import EmployeeForm from '../components/Employees/EmployeeForm';
 import Toast from '../components/common/Toast';
@@ -39,7 +40,11 @@ const EmployeesPage: React.FC = () => {
     setShowForm(false);
     setEditingEmployee(null);
     setRefreshKey(k => k + 1);
-    showToast(action === 'created' ? 'Employee added successfully' : 'Employee updated successfully');
+    showToast(
+      action === 'created'
+        ? 'Employee added successfully'
+        : 'Employee updated successfully'
+    );
   };
 
   const handleDeleteSuccess = () => {
@@ -55,7 +60,8 @@ const EmployeesPage: React.FC = () => {
           <p className="page-sub">Manage your organization's workforce</p>
         </div>
         <button className="btn-primary" onClick={handleAdd}>
-          + Add employee
+          <AddIcon style={{ fontSize: 18 }} />
+          Add employee
         </button>
       </div>
 
